@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Scanner;
 
 public class Main {
-    private static boolean isGenerating = true;
+    private static final boolean isGenerating = true;
     private static final YearGenerator yearGenerator  = new YearGenerator();
     private static final Memory memory = Memory.getInstance();
     private static final Logger LOGGER = LogManager.getLogger(Main.class.getName());
@@ -20,7 +20,7 @@ public class Main {
             while (isGenerating) {
                 try {
                     yearGenerator.generateNewYear();
-                    Thread.sleep(3000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -32,10 +32,18 @@ public class Main {
         Thread userInputThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (isGenerating) {
+                System.out.println("Enter a year:\n");
                 if (scanner.hasNext()) {
                     String input = scanner.next();
-                        LOGGER.info("number of people in: "+input+" = "+memory.getNumberOfPeople(input));
-                        System.out.println(memory.getNumberOfPeople(input));
+                        long numberOfPeople = memory.getNumberOfPeople(input);
+                        if(numberOfPeople == -1) {
+                           LOGGER.error("This year is not initialized yet");
+                            System.out.println("This year is not initialized yet");
+                        } else {
+                            LOGGER.info("Number of people in: "+input+" = "+numberOfPeople);
+                            System.out.println("Number of people in: "+input+" = "+numberOfPeople+"\n");
+                        }
+
                 }
             }
         });

@@ -11,27 +11,26 @@ import java.util.concurrent.TimeUnit;
 
 
 public class YearGenerator {
+    private static final int NUMBER_OF_THREADS = 10;
     private static final Logger LOGGER = LogManager.getLogger(YearGenerator.class.getName());
     private final Memory memory = Memory.getInstance();
     private final Town town = Town.getInstance();
     private static final SecureRandom generator = new SecureRandom();
     public void generateNewYear() throws InterruptedException {
-       generatePeople();
+       generateNewborns();
        removeDeadPeople();
        archivePeopleAlive();
        updateCurrentYear();
-
     }
-    private void generatePeople () throws InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-        int newborns = //generator.nextInt(Memory.MAX_NUMBER_OF_NEWBORNS)+1;
-                generator.nextInt(5)+1;
+    private void generateNewborns() throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+        int newborns = generator.nextInt(Memory.MAX_NUMBER_OF_NEWBORNS)+1;
 
         int currentYear = memory.getCurrentYear();
 
 
-        for (int i = 0 ; i < 10; i++) {
-            int personAge = 19001;/*/*ThreadLocalRandom.current().nextInt(/*Memory.MAX_NUMBER_OF_Person_Age*/;
+        for (int i = 0 ; i < newborns; i++) {
+            int personAge =ThreadLocalRandom.current().nextInt(Memory.MAX_NUMBER_OF_Person_Age);
             int dateOfDeath = currentYear + personAge;
             executorService.submit(() -> town.insertPerson(dateOfDeath));
 

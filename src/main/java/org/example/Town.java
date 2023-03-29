@@ -18,14 +18,14 @@ public class Town {
         return instance;
     }
 
+    public  ConcurrentMap<Integer, Integer> getPeople() {
+        return people;
+    }
 
     public  void insertPerson(int key) {
         people.compute(key, (k, v) -> (v == null) ? 1 : v + 1);
     }
 
-    public  ConcurrentMap<Integer, Integer> getPeople() {
-        return people;
-    }
     public  int removeYear(int year){
         if (people.containsKey(year)) {
             return people.remove(year);
