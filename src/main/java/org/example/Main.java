@@ -32,17 +32,10 @@ public class Main {
         Thread userInputThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (isGenerating) {
-                System.out.println("Enter exit to stop the system: ");
                 if (scanner.hasNext()) {
                     String input = scanner.next();
-                    if(!input.equals("exit")) {
                         LOGGER.info("number of people in: "+input+" = "+memory.getNumberOfPeople(input));
                         System.out.println(memory.getNumberOfPeople(input));
-
-                    } else {
-                        System.exit(0);
-                        isGenerating = false;
-                    }
                 }
             }
         });
