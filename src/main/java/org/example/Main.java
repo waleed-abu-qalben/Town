@@ -15,6 +15,9 @@ public class Main {
         generateNewYear();
         takeUserInputs();
     }
+
+    // Thread1:
+    // generates a new year avery 5 seconds (1 year)
     private static void generateNewYear() {
         Thread generationThread = new Thread(() -> {
             while (isGenerating) {
@@ -28,6 +31,14 @@ public class Main {
         });
         generationThread.start();
     }
+
+
+    /*
+    * Thread2:
+    * 1- takes a year as input from the user
+    * 2- returns -1 if the year is not generated yet.
+    * 3- returns the number of people alive in that year
+    */
     private static void takeUserInputs() {
         Thread userInputThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);

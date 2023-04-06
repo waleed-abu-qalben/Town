@@ -22,6 +22,17 @@ public class YearGenerator {
        archivePeopleAlive();
        updateCurrentYear();
     }
+
+    /*
+     this method is used to:
+      - generate a random number of people
+      - give each one of them a random age
+      - calculate date of death, by adding their age to current year
+      - store them as groups in the town's people map
+      - the date of death as key and number of people will die in that year as value
+      - this process done concurrently.
+
+    */
     private void generateNewborns() throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
         int newborns = generator.nextInt(Memory.MAX_NUMBER_OF_NEWBORNS)+1;
@@ -40,20 +51,32 @@ public class YearGenerator {
         LOGGER.info("Current Year : "+ memory.getCurrentYear());
         LOGGER.info("Original people :\n"+town.getPeople());
     }
+    
+    // this method is used to remove people will die in the current year
     private  void removeDeadPeople() {
-      int numberOfDead =  town.removeYear(memory.getCurrentYear());
+       int currentYear =  memory.getCurrentYear();
+      int numberOfDead =  town.removeYear(currentYear);
       LOGGER.info("number of Dead = "+numberOfDead);
       LOGGER.info("People after cleaning:\n"+town.getPeople());
     }
+
+    /*
+    this method responsible to call add to archive method from memory class
+     and pass to it the current year and number of people alive.
+    */
     private void archivePeopleAlive() {
-        memory.addToArchive(String.valueOf(memory.getCurrentYear()), town.getPeopleAlive());
+        String currentYear = String.valueOf(memory.getCurrentYear());
+        int numberOfPeopleAlive = getNumberOfPeopleAlive();
+        memory.addAlivePeopleToArchive(currentYear, numberOfPeopleAlive);
         LOGGER.info("Archive \n"+ memory.getArchive());
 
     }
     private void updateCurrentYear() {
         memory.updateCurrentYear();
     }
-
+    private int getNumberOfPeopleAlive(){
+        return town.sumAllValues();
+    }
 
 
 }
